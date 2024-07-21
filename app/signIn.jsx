@@ -18,10 +18,12 @@ import { useRouter } from "expo-router";
 import Loading from "../components/Loading";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomKeyboardView from "../components/CustomKeyboardView";
+import { useAuth } from "../context/authContext";
 
 const SignIn = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const {login} = useAuth()
 
   const emailRef = useRef("");
   const passwordRef = useRef("");
@@ -33,6 +35,13 @@ const SignIn = () => {
     }
 
     //login process
+    setLoading(true)
+    const response = await login('Sign In', "Please fill all the fields")
+    setLoading(false)
+    if(!response.success) {
+      Alert.alert('Sign In', response.msg)
+    }
+
   };
   return (
     <CustomKeyboardView>
